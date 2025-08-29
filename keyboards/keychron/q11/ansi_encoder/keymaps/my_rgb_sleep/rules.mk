@@ -1,0 +1,8 @@
+ENCODER_MAP_ENABLE = yes
+SPLIT_KEYBOARD = yes
+CONSOLE_ENABLE = yes
+DEFERRED_EXEC_ENABLE = yes
+RGB_MATRIX_ENABLE = yes
+RGB_MATRIX_CUSTOM_USER = yes
+SRC += split_rgb_sync.c
+SRC += reactive_taps.c
