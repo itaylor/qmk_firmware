@@ -188,15 +188,6 @@ void keyboard_post_init_user(void) {
     uprintf("RPC reg %s\n", is_keyboard_master() ? "m" : "s");
 }
 
-// Helper: one-way send (no reply expected)
-static inline bool send_sleep_flag(bool s) {
-    flog ("RPC Noop\n");
-    return true;
-    // uint8_t v = s ? 1 : 0;
-    // bool ok = transaction_rpc_send(RPC_SYNC_SLEEP, 1, &v);
-    // flog("RPC %u -> %s\n", v, ok ? "y" : "n");
-    // return ok;
-}
 bool suspended = false;
 
 // Override KB-level hooks so nothing upstream undoes us.
@@ -205,15 +196,14 @@ void suspend_power_down_kb(void) {
         suspended = true;
         flog("%s down\n", is_keyboard_master() ? "m" : "s" );
         apply_sleep_visual(true);     // change locally (this half)
-        send_sleep_flag(true);        // tell the other half
     }
+    rgb_sync_maybe_resync();
 }
 
 void suspend_wakeup_init_kb(void) {
     if (suspended) {
         flog("%s up\n", is_keyboard_master() ? "m" : "s" );
         apply_sleep_visual(false);    // change locally
-        send_sleep_flag(false);       // tell the other half
         suspended = false;
     }
 }

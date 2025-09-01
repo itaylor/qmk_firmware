@@ -33,15 +33,11 @@ void rgb_sync_now(void) {
     (void)transaction_rpc_send(RGB_SYNC_TIME, sizeof(payload), &payload);
 }
 
-static inline void rgb_sync_maybe_resync(void) {
+void rgb_sync_maybe_resync(void) {
     if (!is_keyboard_master()) return;
     if (timer_elapsed32(g_last_sync_at) >= RGB_SYNC_RESYNC_MS) {
         rgb_sync_now();
     }
-}
-
-void housekeeping_task_user(void) {
-    rgb_sync_maybe_resync();
 }
 
 void rgb_sync_init(void) {
